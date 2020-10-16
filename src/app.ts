@@ -13,7 +13,7 @@ import TransactionController from "./services/transactions/controller";
 interface AppConfig {
   appSecret: string;
   services: BaseController[];
-  port?: number;
+  port?: number;  // ? = parameter is optional
   middleware?: Middleware[];
   errorHandlers?: ErrorHandlingMiddleware[];
   AuthManagerClass: { new (appSecret: string): any };
