@@ -31,7 +31,7 @@ class Transaction {
   }) // provided schema does NOT include NOT NULL
   public description: string;
   
-  @ManyToOne(() => Account, account => account.id, {onDelete:'CASCADE', eager : true})
+  @ManyToOne(() => Account, account => account, {onDelete:'CASCADE', eager : true})
   public account: Account;
 
 

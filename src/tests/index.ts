@@ -418,9 +418,8 @@ describe("expense manager", () => {
       expect(getResponse).to.have.status(200);
 
       const { account, amount, transactionDate, description, accountId } = getResponse.body;
-      console.log(getResponse.body);
       expect(account.id).to.equals(TEST_ACCOUNT_ID);
-      expect(amount.id).to.equals(-2500.0);
+      expect(amount).to.equals(-2500.0);
       expect(transactionDate).to.be.not.null;
       expect(description).to.equals("electricity bill");
     });

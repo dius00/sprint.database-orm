@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class eagerOn1602829561735 implements MigrationInterface {
-    name = 'eagerOn1602829561735'
+export class TablesareEager1602832511424 implements MigrationInterface {
+    name = 'TablesareEager1602832511424'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "accounts" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "ownerId" uuid, CONSTRAINT "PK_5a7a02c20412299d198e097a8fe" PRIMARY KEY ("id"))`, undefined);
