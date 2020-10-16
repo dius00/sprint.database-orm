@@ -1,7 +1,6 @@
 import { Repository, getRepository, DeleteResult } from "typeorm";
 import Account from "../../entities/AccountModel";
 import { IManager } from "../common/manager";
-import Transaction from "../../entities/TransactionModel";
 
 interface AccountWithBalance extends Account {
   balance: number;
@@ -41,14 +40,9 @@ class AccountManager implements IManager {
     blankAccount.balance = accountBalanceDerived;
     return blankAccount;
 
-    
     // FIXME Your should derive account balance by aggregating all the transactions
-    // const transactions = await this.accountRepository.createQueryBuilder("transactions")
-    // .where("transaction.account.id =" accountId)
-    // .getMany();
-
-    // console.log(transactions);
-    
+    // import Transation
+    // getrepo(transaction).find(transactios by accountid)
   }
 
   /**

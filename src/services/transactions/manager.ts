@@ -32,9 +32,6 @@ class TransactionManager implements IManager {
    * Get a transaction from database
    */
   public async getTransaction(transactionId: string): Promise<Transaction> {
-    /*const transaction = await this.transactionRepository.createQueryBuilder("transactions")
-    .where("transactions.id = :id", {id: transactionId})
-    .getOne()  */
     return await this.transactionRepository.findOne(transactionId);
   }
 
@@ -51,10 +48,12 @@ class TransactionManager implements IManager {
    * Get a list of transactions of a particular account
    */
   public async listTransactionsInAccount(accountId: string): Promise<Transaction[]> {
-    const transactions = await this.transactionRepository.createQueryBuilder("transactions")
-    .where("transactions.account = :account", {account: accountId})
-    .getMany();
-    return transactions;//Promise.resolve([]);
+    const transactions = await this.transactionRepository.find({
+      where: {
+        account: accountId
+      }
+    })
+    return transactions;
   }
 
   /**
@@ -62,9 +61,6 @@ class TransactionManager implements IManager {
    * Get a list of transactions less than `maximumAmount` in a particular `account`
    */
   public async filterTransactionsByAmountInAccount(accountId: string, maximumAmount: number): Promise<Transaction[]> {
-    // const transactions = await this.transactionRepository.createQueryBuilder("transactions")
-    // .where("transactions.account = :account", {account: accountId})
-    // .getMany();
     const transaction = await this.transactionRepository.find({
       where:
         {amount: LessThanOrEqual(-1*maximumAmount), account: accountId},
@@ -72,7 +68,7 @@ class TransactionManager implements IManager {
     
     return transaction;
   }
-  //.where("transactions.amount = :amount", {amount: -1 * maximumAmount})
+  
   /**
    * FIXME
    * create a new transaction
