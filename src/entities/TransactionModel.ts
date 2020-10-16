@@ -17,7 +17,7 @@ import Account from "./AccountModel";
 @Entity({name: "transactions" /* Relation name in database */})
 class Transaction {
 
-  @PrimaryColumn("uuid")
+  @PrimaryGeneratedColumn("uuid")
   public id: string;
 
   @Column() // no need to set nullable as "by default column is nullable: false."
@@ -31,7 +31,7 @@ class Transaction {
   }) // provided schema does NOT include NOT NULL
   public description: string;
   
-  @ManyToOne(() => Account, account => account.id, {onDelete:'CASCADE'})
+  @ManyToOne(() => Account, account => account.id, {onDelete:'CASCADE', eager : true})
   public account: Account;
 
 

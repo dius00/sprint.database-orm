@@ -19,10 +19,11 @@ class TransactionManager implements IManager {
   /**
    * FIXME
    * After defining the Account entity,
-   * uncomment the lines in the constructor definition
+   * uncomment the litnes in the constructor definition
    */
   constructor() {
-    // this.transactionRepository = getRepository(Transaction);
+    this.transactionRepository = getRepository(Transaction);
+
   }
 
   /**
@@ -30,7 +31,10 @@ class TransactionManager implements IManager {
    * Get a transaction from database
    */
   public async getTransaction(transactionId: string): Promise<Transaction> {
-    return Promise.resolve(new Transaction());
+    /*const transaction = await this.transactionRepository.createQueryBuilder("transactions")
+    .where("transactions.id = :id", {id: transactionId})
+    .getOne()  */
+    return await this.transactionRepository.findOne(transactionId);
   }
 
   /**
@@ -38,7 +42,7 @@ class TransactionManager implements IManager {
    * Get a list of transactions with ids from database
    */
   public async listTransactionsByIds(transactionIds: string[]): Promise<Transaction[]> {
-    return Promise.resolve([]);
+    return await this.transactionRepository.findByIds(transactionIds)
   }
 
   /**
@@ -46,7 +50,10 @@ class TransactionManager implements IManager {
    * Get a list of transactions of a particular account
    */
   public async listTransactionsInAccount(accountId: string): Promise<Transaction[]> {
-    return Promise.resolve([]);
+    const transactions = await this.transactionRepository.createQueryBuilder("transactions")
+    .where("transactions.account = :account", {account: accountId})
+    .getMany();
+    return transactions;//Promise.resolve([]);
   }
 
   /**
@@ -54,7 +61,11 @@ class TransactionManager implements IManager {
    * Get a list of transactions less than `maximumAmount` in a particular `account`
    */
   public async filterTransactionsByAmountInAccount(accountId: string, maximumAmount: number): Promise<Transaction[]> {
-    return Promise.resolve([]);
+    const transactions = await this.transactionRepository.createQueryBuilder("transactions")
+    .where("transactions.amount < :amount", {amount: -1 * maximumAmount})
+    .getMany();
+    console.log(transactions)
+    return transactions;
   }
 
   /**
@@ -62,8 +73,11 @@ class TransactionManager implements IManager {
    * create a new transaction
    */
   public async createTransaction(details: Partial<TransactionWithAccountId>): Promise<Transaction> {
-    return Promise.resolve(new Transaction());
-  }
+    const newTransaction = new Transaction()
+    for (let key of Object.keys(details)) newTransaction[key] = details[key];
+    await this.transactionRepository.save(newTransaction);
+    return newTransaction;
+    }
 
   /**
    * update a transaction
@@ -76,15 +90,15 @@ class TransactionManager implements IManager {
     transactionId: string,
     changes: Partial<TransactionWithAccountId>,
   ): Promise<Transaction> {
-    // if ("accountId" in changes) {
-    //     changes = {
-    //         ...changes,
-    //         account: <any>{ id: changes.accountId }
-    //     };
-    // }
-    // await this.transactionRepository.update(transactionId, changes);
-    // return this.transactionRepository.findOne(transactionId);
-    return Promise.resolve(new Transaction());
+    if ("accountId" in changes) {
+        changes = {
+            ...changes,
+            account: <any>{ id: changes.accountId }
+        };
+    }
+    await this.transactionRepository.update(transactionId, changes);
+    return this.transactionRepository.findOne(transactionId);
+    
   }
 
   /**
@@ -92,7 +106,7 @@ class TransactionManager implements IManager {
    * delete a transaction
    */
   public async deleteTransaction(transactionId): Promise<DeleteResult | void> {
-    return Promise.resolve();
+    return await this.transactionRepository.delete(transactionId);
   }
 }
 
