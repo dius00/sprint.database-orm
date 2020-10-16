@@ -1,4 +1,4 @@
-import { Entity, OneToMany, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne } from "typeorm";
+import { Entity, OneToMany, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn } from "typeorm";
 import Transaction from "./TransactionModel";
 import User from "./UserModel";
 
@@ -14,10 +14,9 @@ class Account {
   @Column()
   public name: string;
 
-
   // @OneToOne(type => User, user => user.profile) // specify inverse side as a second parameter
-
-  @OneToOne(type => User, user => user.id)
+  @OneToOne(() => User, owner => owner.id, {onDelete:'CASCADE'})
+  @JoinColumn()
   public owner: User;
 }
 
